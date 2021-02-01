@@ -1,6 +1,7 @@
 package com.example1.dao.implementation;
 
 import com.example1.dao.IngredentDAO;
+import com.example1.dto.response.CharacterDTO;
 import com.example1.dto.response.IngredientCaloriesDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class IngredientDAO implements IngredentDAO {
+public class IngredientDAO extends GenericDAO implements IngredentDAO {
 
     @Override
     public IngredientCaloriesDTO getFoodByName(String name) {
@@ -32,20 +33,6 @@ public class IngredientDAO implements IngredentDAO {
 
     @Override
     public List<IngredientCaloriesDTO> getFoodsFromDB() {
-        File file = null;
-        try {
-            file = ResourceUtils.getFile("classpath:food.json");
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<List<IngredientCaloriesDTO>> typeRef = new TypeReference<>(){};
-        List<IngredientCaloriesDTO> foodCalories = null;
-        try{
-            foodCalories = objectMapper.readValue(file, typeRef);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return foodCalories;
+        return getObjectFromJSON("food.json", IngredientCaloriesDTO.class);
     }
 }
